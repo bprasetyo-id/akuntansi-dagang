@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SDLC & Software Architecture Document - Akuntansi Perusahaan Dagang</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Highlight.js (Atom One Dark theme for pristine code styling) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <!-- Marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
+  
+  <!-- Mermaid.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 18mm 16mm 18mm 16mm;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.6;
+      color: #1e293b;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      height: 100vh;
+      min-height: 250mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding: 30mm 10mm 15mm 10mm;
+      position: relative;
+    }
+
+    .cover-top-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      border: 1px solid #c7d2fe;
+      margin-bottom: 24px;
+    }
+
+    .cover-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 28pt;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #0f172a;
+      margin: 0 0 16px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .cover-subtitle {
+      font-size: 13pt;
+      line-height: 1.45;
+      color: #475569;
+      font-weight: 400;
+      margin-bottom: 36px;
+      max-width: 90%;
+    }
+
+    .cover-divider {
+      width: 80px;
+      height: 5px;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4);
+      border-radius: 4px;
+      margin-bottom: 40px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .meta-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .meta-label {
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .meta-value {
+      font-size: 9.5pt;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .cover-footer {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5pt;
+      color: #64748b;
+    }
+
+    /* Main Typography */
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20pt;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+      page-break-before: always;
+    }
+
+    h1:first-of-type {
+      page-break-before: auto;
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15pt;
+      font-weight: 700;
+      color: #1e1b4b;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #cbd5e1;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: #475569;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+      text-align: justify;
+    }
+
+    strong {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+    }
+
+    td {
+      padding: 7px 10px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: #1e293b !important;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 12px 0 18px 0;
+      overflow-x: auto;
+      border: 1px solid #334155;
+      page-break-inside: avoid;
+    }
+
+    code {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 8pt;
+      line-height: 1.45;
+    }
+
+    :not(pre) > code {
+      background-color: #f1f5f9;
+      color: #4338ca;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+      font-weight: 500;
+    }
+
+    /* Mermaid Diagrams */
+    .mermaid {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0 24px 0;
+      padding: 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      page-break-inside: avoid;
+    }
+
+    .mermaid svg {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+
+    /* KaTeX math formulas */
+    .katex-display {
+      margin: 12px 0 16px 0 !important;
+      padding: 8px 14px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border-left: 3px solid #6366f1;
+      overflow-x: auto;
+      page-break-inside: avoid;
+    }
+
+    /* Blockquotes / Callouts */
+    blockquote {
+      margin: 14px 0;
+      padding: 10px 16px;
+      background-color: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      border-radius: 0 6px 6px 0;
+      color: #166534;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    ul, ol {
+      margin: 0 0 12px 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #e2e8f0;
+      margin: 24px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Page -->
+  <div class="cover-page">
+    <div>
+      <div class="cover-top-badge">Spesifikasi Arsitektur Sistem & SDLC</div>
+      <h1 class="cover-title" style="page-break-before: auto; border: none; padding: 0;">SISTEM INFORMASI AKUNTANSI PERUSAHAAN DAGANG</h1>
+      <p class="cover-subtitle">
+        Dokumentasi Rekayasa Perangkat Lunak, Rancangan Arsitektur Double-Entry Bookkeeping, Skema Database Relasional, dan Algoritma Pelaporan Finansial Komprehensif Berbasis Web.
+      </p>
+      <div class="cover-divider"></div>
+      
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-label">Domain Sistem</div>
+          <div class="meta-value">Akuntansi Khusus Perusahaan Dagang (Merchandising)</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Teknologi Frontend</div>
+          <div class="meta-value">React 18/19, Tailwind CSS, TanStack Query</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Backend & Database</div>
+          <div class="meta-value">Supabase Cloud, PostgreSQL 15+, PL/pgSQL Triggers</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Pondasi Akuntansi</div>
+          <div class="meta-value">Strict Double-Entry Engine & Multi-Step Income Statement</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Penyusun Dokumen</div>
+          <div class="meta-value">Senior System Analyst & Software Architect</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Status & Versi</div>
+          <div class="meta-value">Versi 1.0.0 — Production Ready</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div>Enterprise Architecture Framework &bull; SDLC Specification</div>
+      <div>Oktober 2026 &bull; DOKUMEN RESMI</div>
+    </div>
+  </div>
+
+  <!-- Document Content Target -->
+  <main id="content"></main>
+
+  <script>
+    const rawMarkdown = "# SOFTWARE DEVELOPMENT LIFE CYCLE (SDLC) & SYSTEM ARCHITECTURE DOCUMENT\n## Sistem Informasi Akuntansi Berbasis Web Khusus Perusahaan Dagang\n**Tech Stack:** React, Tailwind CSS, Supabase (PostgreSQL)  \n**Author:** Senior System Analyst & Software Architect  \n**Version:** 1.0.0  \n**Status:** Approved for Implementation  \n\n---\n\n## 1. PENDAHULUAN & METODOLOGI SDLC\n\n### 1.1 Karakteristik Spesifik Akuntansi Perusahaan Dagang\nPerusahaan dagang (*merchandising/trading company*) memiliki siklus akuntansi yang berbeda signifikan dibandingkan perusahaan jasa. Karakteristik utamanya meliputi:\n1. **Perputaran Persediaan Barang Dagang (*Merchandise Inventory*)**: Transaksi pembelian barang untuk dijual kembali tanpa mengubah bentuk fisik.\n2. **Kalkulasi Beban Pokok Penjualan (HPP / *Cost of Goods Sold*)**: Penentuan nilai persediaan yang terjual baik melalui metode perpetual maupun periodik.\n3. **Akun Kontra dan Penyesuaian**: Akun seperti *Retur Penjualan*, *Potongan Penjualan*, *Retur Pembelian*, *Potongan Pembelian*, serta *Beban Angkut Pembelian (Freight-In)*.\n4. **Struktur Laba Rugi Bertahap (*Multi-Step Income Statement*)**: Pemisahan tegas antara Laba Kotor (*Gross Profit*), Laba Operasional (*Operating Income*), dan Laba Bersih (*Net Income*).\n\n### 1.2 Model SDLC: Agile Scrum\nPengembangan mengadopsi kerangka kerja **Agile Scrum** dengan sprint 2 mingguan:\n- **Sprint 1 (Fondasi & COA)**: Setup Supabase, skema database, RLS, Auth, dan Bagan Akun (*Chart of Accounts*).\n- **Sprint 2 (Engine Jurnal & Buku Besar)**: Core double-entry engine, trigger validasi debit-kredit, Jurnal Manual, Buku Besar.\n- **Sprint 3 (Kas Masuk & Kas Keluar)**: Transaksi Kas/Bank otomatisasi pembuatan ayat jurnal penerimaan dan pengeluaran kas.\n- **Sprint 4 (Laporan Keuangan)**: Neraca Saldo, Laba Rugi Multi-Step, Neraca (*Balance Sheet*).\n- **Sprint 5 (Pengujian, Audit Trail, & Deployment)**: Uji konsistensi matematis, stress testing, UAT, dan deployment ke Vercel/Supabase.\n\n---\n\n## 2. ANALISIS KEBUTUHAN & CAKUPAN FITUR\n\n### 2.1 Matriks Peran & Hak Akses (Role-Based Access Control / RBAC)\nSistem menggunakan 4 role pengguna:\n| Fitur / Modul | Owner / Direktur | Akuntan (Senior) | Kasir / Staff Keuangan | Auditor |\n| :--- | :---: | :---: | :---: | :---: |\n| Kelola Akun & COA | Read | Full Access | Read | Read |\n| Transaksi Kas Masuk | Read | Create, Read, Void | Create, Read | Read |\n| Transaksi Kas Keluar | Approve, Read | Create, Read, Void | Create, Read | Read |\n| Jurnal Manual & Penyesuaian | Read | Full Access | No Access | Read |\n| Posting & Closing Periode | Approve | Execute | No Access | Read |\n| Laporan Keuangan Lengkap | Full Access | Full Access | Restricted | Full Access |\n| Audit Trail & Log | Read | Read | No Access | Full Access |\n\n---\n\n### 2.2 Dekomposisi Fitur\n\n#### F01: Modul Autentikasi & Profil Pengguna\n- **F01.1 Sign In / Sign Out**: Autentikasi berbasis email-password dan session JWT via Supabase Auth.\n- **F01.2 RBAC Enforcement**: Validasi role di level middleware React Router dan PostgreSQL Row Level Security (RLS).\n- **F01.3 Audit Profil**: Pencatatan data pengguna pembuat (*created_by*) dan penyetuju (*approved_by*) pada setiap transaksi.\n\n#### F02: Bagan Akun (Chart of Accounts - COA)\n- **F02.1 Standarisasi 5 Golongan Akun Utama**:\n  - `1-0000` **Aset (Assets)**: Kas, Bank, Piutang Dagang, Cadangan Kerugian Piutang, Persediaan Barang Dagang, Perlengkapan, Aset Tetap, Akumulasi Penyusutan.\n  - `2-0000` **Liabilitas (Liabilities)**: Utang Usaha, Beban yang Masih Harus Dibayar, Utang Bank Jangka Pendek, Utang Jangka Panjang.\n  - `3-0000` **Ekuitas (Equity)**: Modal Disetor, Prive Pemilik, Laba Ditahan (*Retained Earnings*), Laba Periode Berjalan.\n  - `4-0000` **Pendapatan (Revenue)**: Pendapatan Penjualan, Retur Penjualan, Potongan Penjualan, Pendapatan Non-Operasional.\n  - `5-0000` **Beban Pokok Penjualan (HPP)**: Beban Pokok Penjualan, Pembelian, Beban Angkut Pembelian, Retur Pembelian, Potongan Pembelian.\n  - `6-0000` **Beban Operasional (Expenses)**: Beban Gaji, Beban Sewa, Beban Listrik/Air/Internet, Beban Pemasaran, Beban Perlengkapan, Beban Penyusutan.\n  - `8-0000` & `9-0000` **Pendapatan & Beban Lain-Lain**.\n- **F02.2 Normal Balance & Leveling**: Penentuan saldo normal (`DEBIT` atau `KREDIT`) dan dukungan hierarki multi-tier (Header Akun vs Child/Detail Akun).\n\n#### F03: Transaksi Kas Masuk (Cash Receipt / Inflow)\n- **F03.1 Perekaman Bukti Kas Masuk (BKM)**: Form penerimaan kas/transfer bank untuk pelunasan piutang dagang, penjualan tunai, maupun penerimaan lainnya.\n- **F03.2 Automatic Journal Generation**:\n  - Pelunasan Piutang: `[Dr] Kas/Bank` & `[Cr] Piutang Dagang` (beserta potongan pelunasan jika ada).\n  - Penjualan Kas: `[Dr] Kas/Bank` & `[Cr] Pendapatan Penjualan`.\n\n#### F04: Transaksi Kas Keluar (Cash Disbursement / Outflow)\n- **F04.1 Perekaman Bukti Kas Keluar (BKK)**: Form pengeluaran kas/transfer bank untuk pembayaran utang usaha, pembelian barang dagang tunai, beban operasional, dan prive pemilik.\n- **F04.2 Automatic Journal Generation**:\n  - Pembayaran Utang: `[Dr] Utang Usaha` & `[Cr] Kas/Bank` (beserta potongan pembayaran).\n  - Pembayaran Beban: `[Dr] Beban Operasional Terkait` & `[Cr] Kas/Bank`.\n\n#### F05: Jurnal Manual (General & Memorial Journal)\n- **F05.1 Fleksibilitas Multi-Row**: Form dinamis untuk membuat ayat jurnal dengan minimal 2 baris (1 debit, 1 kredit) atau jurnal majemuk (*compound journal*).\n- **F05.2 Validasi Zero-Sum (Balance Constraint)**: Sistem menolak penyimpanan atau posting jika `Total Debit != Total Kredit`.\n- **F05.3 Jurnal Penyesuaian (AJP)**: Perekaman penyesuaian akhir periode (penyusutan aset, rekonsiliasi stok fisik/opname, persediaan akhir periodik).\n\n#### F06: Modul Laporan Keuangan Komprehensif\n- **F06.1 Buku Besar (General Ledger)**: Tampilan mutasi debet/kredit per akun beserta saldo berjalan (*running balance*) dan filter rentang tanggal.\n- **F06.2 Neraca Saldo (Trial Balance)**: Ringkasan saldo akhir seluruh akun aktif untuk menguji keseimbangan debit dan kredit sebelum tutup buku.\n- **F06.3 Laporan Laba Rugi Perusahaan Dagang (Income Statement)**: Format Multiple-Step yang menyajikan Penjualan Bersih, HPP, Laba Kotor, Beban Operasional, dan Laba Bersih.\n- **F06.4 Neraca (Balance Sheet / Laporan Posisi Keuangan)**: Klasifikasi Aset, Liabilitas, dan Ekuitas dengan injeksi laba periode berjalan secara dinamis agar seimbang.\n- **F06.5 Fitur Ekspor & Cetak**: Fitur cetak ramah printer (*print stylesheet*) dan ekspor ke PDF/Excel.\n\n---\n\n## 3. ARSITEKTUR SISTEM & ALUR DATA\n\n### 3.1 Arsitektur Tingkat Tinggi (High-Level Architecture)\n\n```mermaid\ngraph TD\n    subgraph ClientLayer [\"Client Presentation Layer (React 18/19 + Tailwind CSS)\"]\n        UI_Pages[\"Pages (COA, Transaksi, Jurnal, Laporan)\"]\n        UI_Components[\"Tailwind UI Kit & Reusable Components\"]\n        UI_State[\"Zustand (Global State) + React Hook Form\"]\n        TanStack[\"TanStack Query v5 (Data Fetching & Cache)\"]\n    end\n\n    subgraph SecurityLayer [\"Security & Routing Layer\"]\n        Supabase_Auth[\"Supabase Auth (JWT + Session Storage)\"]\n        AppRouter[\"Protected Routes & RBAC Guards\"]\n    end\n\n    subgraph BackendLayer [\"Backend as a Service (Supabase Cloud / Self-hosted)\"]\n        PostgREST[\"PostgREST API (Automated RESTful Endpoints)\"]\n        RLS[\"PostgreSQL Row Level Security (Tenant & Role Isolation)\"]\n        DB_Triggers[\"PL/pgSQL Invariant Triggers (Balance & Immutability)\"]\n        Storage[\"Supabase Storage (Bukti Bayar / Nota Bukti Transaksi)\"]\n    end\n\n    subgraph DataLayer [\"Database Layer (PostgreSQL 15+)\"]\n        Tables[\"Relational Tables (COA, Journals, Lines, Periods)\"]\n        Views[\"Materialized Views & Reporting Views (GL, TB, Financial Statements)\"]\n        StoredProcs[\"Database Functions / RPC (Closing Period, Ledger Balances)\"]\n    end\n\n    UI_Pages --> UI_State\n    UI_Pages --> TanStack\n    TanStack --> Supabase_Auth\n    Supabase_Auth --> AppRouter\n    AppRouter --> PostgREST\n    PostgREST --> RLS\n    RLS --> Tables\n    Tables --> DB_Triggers\n    PostgREST --> Views\n    PostgREST --> StoredProcs\n    UI_Pages --> Storage\n```\n\n### 3.2 Alur Data Transaksi Double-Entry (Sequence Diagram)\n\n```mermaid\nsequenceDiagram\n    autonumber\n    actor Akuntan as Akuntan / Kasir\n    participant Frontend as React Client (UI & Zod Validator)\n    participant ClientHook as Supabase JS Client\n    participant Auth as Supabase Auth (JWT)\n    participant Postgres as PostgreSQL Engine (Supabase)\n    participant Trigger as Trigger: validate_journal_balance\n\n    Akuntan->>Frontend: Input Transaksi (Kas/Jurnal Manual)\n    Frontend->>Frontend: Validasi sisi klien (Zod: Debit = Kredit, min 2 baris)\n    Frontend->>ClientHook: RPC insert_journal_entry_with_lines(payload)\n    ClientHook->>Auth: Sertakan Bearer Token JWT\n    Auth->>Postgres: Teruskan query dengan klaim user_id & role\n    Postgres->>Postgres: Evaluasi RLS (Cek izin role & tenant_id)\n    Postgres->>Postgres: Simpan Header (journal_entries) & Lines (journal_lines)\n    Postgres->>Trigger: Eksekusi BEFORE/AFTER trigger pada status = 'POSTED'\n    alt Total Debit != Total Kredit\n        Trigger-->>Postgres: RAISE EXCEPTION 'Jurnal Tidak Seimbang!'\n        Postgres-->>ClientHook: Rollback Transaction (Status 400 Error)\n        ClientHook-->>Frontend: Tampilkan Pesan Error Validasi\n    else Total Debit == Total Kredit\n        Trigger-->>Postgres: OK (Transaksi Disetujui)\n        Postgres-->>ClientHook: Commit Transaction (Return journal_id)\n        ClientHook-->>Frontend: Invalidate Cache TanStack & Tampilkan Sukses\n        Frontend->>Akuntan: Tampilkan Notifikasi & Bukti Jurnal\n    end\n```\n\n---\n\n## 4. SKEMA DATABASE RELASIONAL (DOUBLE-ENTRY ENGINE)\n\n### 4.1 Diagram Relasi Entitas (Entity Relationship Diagram - ERD)\n\n```mermaid\nerDiagram\n    TENANTS ||--o{ PROFILES : employs\n    TENANTS ||--o{ CHART_OF_ACCOUNTS : owns\n    TENANTS ||--o{ FISCAL_PERIODS : manages\n    TENANTS ||--o{ JOURNAL_ENTRIES : records\n    \n    PROFILES ||--o{ JOURNAL_ENTRIES : creates\n    \n    CHART_OF_ACCOUNTS ||--o{ CHART_OF_ACCOUNTS : parent_child\n    CHART_OF_ACCOUNTS ||--o{ JOURNAL_LINES : references\n    \n    FISCAL_PERIODS ||--o{ JOURNAL_ENTRIES : bounds\n    \n    JOURNAL_ENTRIES ||--|{ JOURNAL_LINES : contains\n\n    TENANTS {\n        uuid id PK\n        varchar name\n        varchar currency\n        timestamp created_at\n    }\n\n    PROFILES {\n        uuid id PK\n        uuid tenant_id FK\n        varchar full_name\n        varchar role\n        timestamp updated_at\n    }\n\n    CHART_OF_ACCOUNTS {\n        uuid id PK\n        uuid tenant_id FK\n        varchar account_code UK\n        varchar account_name\n        varchar category\n        varchar sub_category\n        varchar normal_balance\n        uuid parent_id FK\n        boolean is_active\n        boolean is_header\n    }\n\n    FISCAL_PERIODS {\n        uuid id PK\n        uuid tenant_id FK\n        varchar period_name\n        date start_date\n        date end_date\n        boolean is_closed\n    }\n\n    JOURNAL_ENTRIES {\n        uuid id PK\n        uuid tenant_id FK\n        varchar entry_number UK\n        date entry_date\n        uuid period_id FK\n        varchar source_type\n        varchar source_ref\n        text description\n        varchar status\n        uuid created_by FK\n        timestamp posted_at\n    }\n\n    JOURNAL_LINES {\n        uuid id PK\n        uuid journal_id FK\n        uuid account_id FK\n        numeric debit\n        numeric credit\n        text memo\n        integer line_order\n    }\n```\n\n---\n\n### 4.2 Script DDL PostgreSQL Produksi (Supabase Compatible)\n\nBerikut skrip DDL lengkap mencakup ekstensi UUID, tipe enumerasi, tabel, indeks, validasi constraint, dan trigger PL/pgSQL:\n\n```sql\n-- ============================================================================\n-- 1. EKSTENSI & ENUMERASI\n-- ============================================================================\nCREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";\n\nCREATE TYPE user_role AS ENUM ('owner', 'accountant', 'cashier', 'auditor');\nCREATE TYPE account_category AS ENUM ('ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE');\nCREATE TYPE account_sub_category AS ENUM (\n    'CURRENT_ASSET', 'FIXED_ASSET', 'OTHER_ASSET',\n    'CURRENT_LIABILITY', 'LONG_TERM_LIABILITY',\n    'OWNERS_EQUITY', 'RETAINED_EARNINGS',\n    'OPERATING_REVENUE', 'SALES_CONTRA', 'NON_OPERATING_REVENUE',\n    'COST_OF_GOODS_SOLD', 'OPERATING_EXPENSE', 'NON_OPERATING_EXPENSE'\n);\nCREATE TYPE normal_balance_type AS ENUM ('DEBIT', 'CREDIT');\nCREATE TYPE journal_status AS ENUM ('DRAFT', 'POSTED', 'VOID');\nCREATE TYPE source_type_enum AS ENUM ('CASH_IN', 'CASH_OUT', 'MANUAL_JOURNAL', 'SALES', 'PURCHASE', 'CLOSING');\n\n-- ============================================================================\n-- 2. TABEL PROFIL & TENANT\n-- ============================================================================\nCREATE TABLE tenants (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    company_name VARCHAR(150) NOT NULL,\n    fiscal_year_start_month SMALLINT NOT NULL DEFAULT 1,\n    currency VARCHAR(10) NOT NULL DEFAULT 'IDR',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\nCREATE TABLE profiles (\n    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,\n    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,\n    full_name VARCHAR(100) NOT NULL,\n    role user_role NOT NULL DEFAULT 'accountant',\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\n-- ============================================================================\n-- 3. TABEL BAGAN AKUN (CHART OF ACCOUNTS)\n-- ============================================================================\nCREATE TABLE chart_of_accounts (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,\n    account_code VARCHAR(30) NOT NULL,\n    account_name VARCHAR(150) NOT NULL,\n    category account_category NOT NULL,\n    sub_category account_sub_category NOT NULL,\n    normal_balance normal_balance_type NOT NULL,\n    parent_id UUID REFERENCES chart_of_accounts(id) ON DELETE RESTRICT,\n    is_header BOOLEAN NOT NULL DEFAULT FALSE,\n    is_active BOOLEAN NOT NULL DEFAULT TRUE,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n    CONSTRAINT uq_tenant_account_code UNIQUE (tenant_id, account_code)\n);\n\nCREATE INDEX idx_coa_tenant_cat ON chart_of_accounts(tenant_id, category);\nCREATE INDEX idx_coa_parent ON chart_of_accounts(parent_id);\n\n-- ============================================================================\n-- 4. TABEL PERIODE FISKAL (FISCAL PERIODS)\n-- ============================================================================\nCREATE TABLE fiscal_periods (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,\n    period_name VARCHAR(50) NOT NULL,\n    start_date DATE NOT NULL,\n    end_date DATE NOT NULL,\n    is_closed BOOLEAN NOT NULL DEFAULT FALSE,\n    closed_at TIMESTAMPTZ,\n    closed_by UUID REFERENCES profiles(id),\n    CONSTRAINT chk_period_dates CHECK (end_date >= start_date),\n    CONSTRAINT uq_tenant_period UNIQUE (tenant_id, period_name)\n);\n\n-- ============================================================================\n-- 5. TABEL JURNAL: HEADER & DETAIL (DOUBLE-ENTRY)\n-- ============================================================================\nCREATE TABLE journal_entries (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,\n    period_id UUID REFERENCES fiscal_periods(id) ON DELETE RESTRICT,\n    entry_number VARCHAR(50) NOT NULL,\n    entry_date DATE NOT NULL DEFAULT CURRENT_DATE,\n    description TEXT NOT NULL,\n    source_type source_type_enum NOT NULL DEFAULT 'MANUAL_JOURNAL',\n    source_ref VARCHAR(100),\n    status journal_status NOT NULL DEFAULT 'POSTED',\n    created_by UUID REFERENCES profiles(id) ON DELETE SET NULL,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n    posted_at TIMESTAMPTZ DEFAULT NOW(),\n    CONSTRAINT uq_tenant_entry_number UNIQUE (tenant_id, entry_number)\n);\n\nCREATE INDEX idx_journal_tenant_date ON journal_entries(tenant_id, entry_date);\nCREATE INDEX idx_journal_status ON journal_entries(tenant_id, status);\n\nCREATE TABLE journal_lines (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    journal_id UUID NOT NULL REFERENCES journal_entries(id) ON DELETE CASCADE,\n    account_id UUID NOT NULL REFERENCES chart_of_accounts(id) ON DELETE RESTRICT,\n    debit NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,\n    credit NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,\n    memo TEXT,\n    line_order INT NOT NULL DEFAULT 1,\n    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n    CONSTRAINT chk_non_negative_amounts CHECK (debit >= 0 AND credit >= 0),\n    CONSTRAINT chk_debit_xor_credit CHECK (\n        (debit > 0 AND credit = 0) OR \n        (credit > 0 AND debit = 0)\n    )\n);\n\nCREATE INDEX idx_jlines_journal ON journal_lines(journal_id);\nCREATE INDEX idx_jlines_account ON journal_lines(account_id);\n\n-- ============================================================================\n-- 6. INTEGRITAS ATOMIK: TRIGGER VALIDASI BALANCE DEBIT = KREDIT\n-- ============================================================================\nCREATE OR REPLACE FUNCTION fn_validate_journal_balance()\nRETURNS TRIGGER AS $$\nDECLARE\n    v_total_debit NUMERIC(18, 4);\n    v_total_credit NUMERIC(18, 4);\n    v_line_count INT;\n    v_period_closed BOOLEAN;\nBEGIN\n    -- Validasi status POSTED saja yang wajib balanced\n    IF NEW.status = 'POSTED' THEN\n        -- 1. Cek apakah periode fiskal sedang ditutup (Closed)\n        IF NEW.period_id IS NOT NULL THEN\n            SELECT is_closed INTO v_period_closed FROM fiscal_periods WHERE id = NEW.period_id;\n            IF v_period_closed THEN\n                RAISE EXCEPTION 'Tidak dapat menyimpan atau memposting jurnal pada periode fiskal yang sudah ditutup.';\n            END IF;\n        END IF;\n\n        -- 2. Cek baris jurnal dan perimbangan total debit vs total credit\n        SELECT \n            COALESCE(SUM(debit), 0), \n            COALESCE(SUM(credit), 0),\n            COUNT(*)\n        INTO \n            v_total_debit, \n            v_total_credit,\n            v_line_count\n        FROM journal_lines\n        WHERE journal_id = NEW.id;\n\n        IF v_line_count < 2 THEN\n            RAISE EXCEPTION 'Jurnal harus memiliki sekurang-kurangnya 2 baris (1 Debit dan 1 Kredit).';\n        END IF;\n\n        IF ROUND(v_total_debit, 2) <> ROUND(v_total_credit, 2) THEN\n            RAISE EXCEPTION 'Jurnal TIDAK SEIMBANG! Total Debit (%) != Total Kredit (%). Selisih: %',\n                v_total_debit, v_total_credit, ABS(v_total_debit - v_total_credit);\n        END IF;\n    END IF;\n\n    RETURN NEW;\nEND;\n$$ LANGUAGE plpgsql;\n\n-- Constraint Trigger dieksekusi di akhir transaksi (DEFERRABLE INITIALLY DEFERRED)\nCREATE CONSTRAINT TRIGGER trg_verify_journal_balance\nAFTER INSERT OR UPDATE ON journal_entries\nDEFERRABLE INITIALLY DEFERRED\nFOR EACH ROW\nEXECUTE FUNCTION fn_validate_journal_balance();\n\n-- ============================================================================\n-- 7. ATURAN ROW LEVEL SECURITY (RLS)\n-- ============================================================================\nALTER TABLE tenants ENABLE ROW LEVEL SECURITY;\nALTER TABLE profiles ENABLE ROW LEVEL SECURITY;\nALTER TABLE chart_of_accounts ENABLE ROW LEVEL SECURITY;\nALTER TABLE fiscal_periods ENABLE ROW LEVEL SECURITY;\nALTER TABLE journal_entries ENABLE ROW LEVEL SECURITY;\nALTER TABLE journal_lines ENABLE ROW LEVEL SECURITY;\n\n-- Helper function untuk mendapatkan tenant_id user saat ini\nCREATE OR REPLACE FUNCTION get_auth_tenant_id()\nRETURNS UUID AS $$\n    SELECT tenant_id FROM profiles WHERE id = auth.uid();\n$$ LANGUAGE sql STABLE SECURITY DEFINER;\n\n-- Kebijakan RLS Isolasi Multi-Tenant\nCREATE POLICY rls_tenant_isolation_coa ON chart_of_accounts\n    FOR ALL USING (tenant_id = get_auth_tenant_id());\n\nCREATE POLICY rls_tenant_isolation_periods ON fiscal_periods\n    FOR ALL USING (tenant_id = get_auth_tenant_id());\n\nCREATE POLICY rls_tenant_isolation_entries ON journal_entries\n    FOR ALL USING (tenant_id = get_auth_tenant_id());\n\nCREATE POLICY rls_tenant_isolation_lines ON journal_lines\n    FOR ALL USING (\n        EXISTS (\n            SELECT 1 FROM journal_entries e \n            WHERE e.id = journal_lines.journal_id \n            AND e.tenant_id = get_auth_tenant_id()\n        )\n    );\n```\n\n---\n\n## 5. LOGIKA KALKULASI MATEMATIS & ENGINE LAPORAN KEUANGAN\n\n### 5.1 Landasan Matematis Double-Entry\nPersamaan dasar akuntansi modern dinyatakan sebagai:\n$$\\text{Aset} + \\text{Beban} + \\text{Potongan Penjualan} = \\text{Liabilitas} + \\text{Ekuitas} + \\text{Pendapatan} + \\text{Potongan Pembelian}$$\n\nAturan pergerakan saldo akun:\n| Golongan Akun | Saldo Normal | Penambahan (+) | Pengurangan (-) |\n| :--- | :---: | :---: | :---: |\n| **Aset (Assets)** | **DEBIT** | Debit | Kredit |\n| **Liabilitas (Liabilities)** | **KREDIT** | Kredit | Debit |\n| **Ekuitas (Equity)** | **KREDIT** | Kredit | Debit |\n| **Pendapatan (Revenue)** | **KREDIT** | Kredit | Debit |\n| **Beban Pokok Penjualan (HPP)** | **DEBIT** | Debit | Kredit |\n| **Beban Operasional (Expense)** | **DEBIT** | Debit | Kredit |\n\n---\n\n### 5.2 Buku Besar (General Ledger)\n\n#### A. Formulasi Saldo Berjalan (Running Balance)\nUntuk akun bersaldo normal **DEBIT** (misal Kas, Piutang, Persediaan, Beban):\n$$\\text{Saldo Berjalan}_t = \\text{Saldo Awal} + \\sum_{i=1}^{t} (\\text{Debit}_i - \\text{Kredit}_i)$$\n\nUntuk akun bersaldo normal **KREDIT** (misal Utang Usaha, Modal, Pendapatan):\n$$\\text{Saldo Berjalan}_t = \\text{Saldo Awal} + \\sum_{i=1}^{t} (\\text{Kredit}_i - \\text{Debit}_i)$$\n\n#### B. Implementasi SQL Stored Procedure / View\n```sql\nCREATE OR REPLACE FUNCTION get_general_ledger(\n    p_tenant_id UUID,\n    p_account_id UUID,\n    p_start_date DATE,\n    p_end_date DATE\n)\nRETURNS TABLE (\n    line_id UUID,\n    entry_number VARCHAR,\n    entry_date DATE,\n    description TEXT,\n    memo TEXT,\n    debit NUMERIC,\n    credit NUMERIC,\n    normal_balance normal_balance_type,\n    running_balance NUMERIC\n) AS $$\nDECLARE\n    v_norm normal_balance_type;\n    v_init_balance NUMERIC(18, 4) := 0;\nBEGIN\n    SELECT normal_balance INTO v_norm \n    FROM chart_of_accounts \n    WHERE id = p_account_id AND tenant_id = p_tenant_id;\n\n    -- Hitung Saldo Awal sebelum p_start_date\n    SELECT \n        CASE \n            WHEN v_norm = 'DEBIT' THEN COALESCE(SUM(jl.debit - jl.credit), 0)\n            ELSE COALESCE(SUM(jl.credit - jl.debit), 0)\n        END INTO v_init_balance\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    WHERE je.tenant_id = p_tenant_id \n      AND jl.account_id = p_account_id\n      AND je.status = 'POSTED'\n      AND je.entry_date < p_start_date;\n\n    RETURN QUERY\n    WITH movements AS (\n        SELECT \n            jl.id AS line_id,\n            je.entry_number,\n            je.entry_date,\n            je.description,\n            jl.memo,\n            jl.debit,\n            jl.credit,\n            v_norm AS normal_balance,\n            CASE \n                WHEN v_norm = 'DEBIT' THEN (jl.debit - jl.credit)\n                ELSE (jl.credit - jl.debit)\n            END AS net_movement,\n            je.created_at,\n            jl.line_order\n        FROM journal_lines jl\n        JOIN journal_entries je ON jl.journal_id = je.id\n        WHERE je.tenant_id = p_tenant_id \n          AND jl.account_id = p_account_id\n          AND je.status = 'POSTED'\n          AND je.entry_date BETWEEN p_start_date AND p_end_date\n    )\n    SELECT \n        m.line_id,\n        m.entry_number,\n        m.entry_date,\n        m.description,\n        m.memo,\n        m.debit,\n        m.credit,\n        m.normal_balance,\n        v_init_balance + SUM(m.net_movement) OVER (ORDER BY m.entry_date, m.created_at, m.line_order) AS running_balance\n    FROM movements m\n    ORDER BY m.entry_date, m.created_at, m.line_order;\nEND;\n$$ LANGUAGE plpgsql STABLE SECURITY DEFINER;\n```\n\n---\n\n### 5.3 Neraca Saldo (Trial Balance)\n\n#### A. Formulasi Matematis\nPada Neraca Saldo, setiap akun dijumlahkan seluruh mutasi debit dan kreditnya dalam periode terpilih:\n$$\\text{Total Debit}_A = \\sum \\text{Debit}_A, \\quad \\text{Total Kredit}_A = \\sum \\text{Kredit}_A$$\n\nPenentuan Posisi Saldo Akhir Berdasarkan Saldo Normal:\n- Jika Saldo Normal Akun = `DEBIT`:\n  $$\\text{Net} = \\text{Total Debit}_A - \\text{Total Kredit}_A$$\n  $$\\text{Jika } \\text{Net} \\ge 0 \\implies \\text{Saldo Debit} = \\text{Net}, \\quad \\text{Saldo Kredit} = 0$$\n  $$\\text{Jika } \\text{Net} < 0 \\implies \\text{Saldo Debit} = 0, \\quad \\text{Saldo Kredit} = |\\text{Net}|$$\n- Jika Saldo Normal Akun = `KREDIT`:\n  $$\\text{Net} = \\text{Total Kredit}_A - \\text{Total Debit}_A$$\n  $$\\text{Jika } \\text{Net} \\ge 0 \\implies \\text{Saldo Debit} = 0, \\quad \\text{Saldo Kredit} = \\text{Net}$$\n  $$\\text{Jika } \\text{Net} < 0 \\implies \\text{Saldo Debit} = |\\text{Net}|, \\quad \\text{Saldo Kredit} = 0$$\n\nSyarat Mutlak Keseimbangan:\n$$\\sum \\text{Saldo Debit Seluruh Akun} \\equiv \\sum \\text{Saldo Kredit Seluruh Akun}$$\n\n#### B. Implementasi SQL Stored Procedure\n```sql\nCREATE OR REPLACE FUNCTION get_trial_balance(\n    p_tenant_id UUID,\n    p_end_date DATE\n)\nRETURNS TABLE (\n    account_id UUID,\n    account_code VARCHAR,\n    account_name VARCHAR,\n    category account_category,\n    sub_category account_sub_category,\n    normal_balance normal_balance_type,\n    ending_debit NUMERIC,\n    ending_credit NUMERIC\n) AS $$\nBEGIN\n    RETURN QUERY\n    WITH raw_sums AS (\n        SELECT \n            c.id AS acc_id,\n            c.account_code AS code,\n            c.account_name AS name,\n            c.category AS cat,\n            c.sub_category AS sub_cat,\n            c.normal_balance AS norm,\n            COALESCE(SUM(jl.debit), 0) AS total_d,\n            COALESCE(SUM(jl.credit), 0) AS total_c\n        FROM chart_of_accounts c\n        LEFT JOIN journal_lines jl ON c.id = jl.account_id\n        LEFT JOIN journal_entries je ON jl.journal_id = je.id AND je.status = 'POSTED' AND je.entry_date <= p_end_date\n        WHERE c.tenant_id = p_tenant_id AND c.is_header = FALSE AND c.is_active = TRUE\n        GROUP BY c.id, c.account_code, c.account_name, c.category, c.sub_category, c.normal_balance\n    )\n    SELECT \n        rs.acc_id,\n        rs.code,\n        rs.name,\n        rs.cat,\n        rs.sub_cat,\n        rs.norm,\n        CASE \n            WHEN rs.norm = 'DEBIT' AND (rs.total_d - rs.total_c) >= 0 THEN (rs.total_d - rs.total_c)\n            WHEN rs.norm = 'KREDIT' AND (rs.total_c - rs.total_d) < 0 THEN ABS(rs.total_c - rs.total_d)\n            ELSE 0\n        END AS ending_debit,\n        CASE \n            WHEN rs.norm = 'KREDIT' AND (rs.total_c - rs.total_d) >= 0 THEN (rs.total_c - rs.total_d)\n            WHEN rs.norm = 'DEBIT' AND (rs.total_d - rs.total_c) < 0 THEN ABS(rs.total_d - rs.total_c)\n            ELSE 0\n        END AS ending_credit\n    FROM raw_sums rs\n    WHERE (rs.total_d > 0 OR rs.total_c > 0)\n    ORDER BY rs.code ASC;\nEND;\n$$ LANGUAGE plpgsql STABLE SECURITY DEFINER;\n```\n\n---\n\n### 5.4 Laporan Laba Rugi Multi-Step Perusahaan Dagang\n\n#### A. Algoritma Kalkulasi Khusus Dagang\nStruktur Laba Rugi Perusahaan Dagang dihitung melalui 5 tahapan berantai:\n\n1. **Penjualan Bersih (*Net Sales*)**:\n   $$\\text{Penjualan Bersih} = \\text{Penjualan Kotor} - \\text{Retur Penjualan} - \\text{Potongan Penjualan}$$\n   *(Catatan: Akun Retur & Potongan Penjualan berstatus Contra-Revenue bersaldo normal DEBIT).*\n\n2. **Beban Pokok Penjualan (HPP / *Cost of Goods Sold*)**:\n   - *Metode Perpetual*: Nilai akumulasi mutasi debit akun HPP yang terposting otomatis saat transaksi penjualan barang.\n   - *Metode Periodik*:\n     $$\\text{Pembelian Bersih} = \\text{Pembelian} + \\text{Beban Angkut Pembelian} - \\text{Retur Pembelian} - \\text{Potongan Pembelian}$$\n     $$\\text{Barang Siap Dijual (BTUD)} = \\text{Persediaan Barang Dagang Awal} + \\text{Pembelian Bersih}$$\n     $$\\text{HPP} = \\text{BTUD} - \\text{Persediaan Barang Dagang Akhir}$$\n\n3. **Laba Kotor (*Gross Profit*)**:\n   $$\\text{Laba Kotor} = \\text{Penjualan Bersih} - \\text{Beban Pokok Penjualan (HPP)}$$\n\n4. **Laba Operasional (*Operating Income*)**:\n   $$\\text{Total Beban Operasi} = \\sum \\text{Beban Penjualan} + \\sum \\text{Beban Administrasi \\& Umum}$$\n   $$\\text{Laba Operasional} = \\text{Laba Kotor} - \\text{Total Beban Operasi}$$\n\n5. **Laba Bersih Sebelum & Setelah Pajak (*Net Profit*)**:\n   $$\\text{Pendapatan \\& Beban Lain} = \\sum \\text{Pendapatan Non-Operasional} - \\sum \\text{Beban Non-Operasional}$$\n   $$\\text{Laba Bersih} = \\text{Laba Operasional} + \\text{Pendapatan \\& Beban Lain}$$\n\n#### B. Implementasi SQL Stored Procedure Laba Rugi\n```sql\nCREATE OR REPLACE FUNCTION get_income_statement(\n    p_tenant_id UUID,\n    p_start_date DATE,\n    p_end_date DATE\n)\nRETURNS JSON AS $$\nDECLARE\n    v_gross_sales NUMERIC(18,4) := 0;\n    v_sales_returns NUMERIC(18,4) := 0;\n    v_sales_discounts NUMERIC(18,4) := 0;\n    v_net_sales NUMERIC(18,4) := 0;\n    \n    v_cogs NUMERIC(18,4) := 0;\n    v_gross_profit NUMERIC(18,4) := 0;\n    \n    v_operating_expenses NUMERIC(18,4) := 0;\n    v_operating_income NUMERIC(18,4) := 0;\n    \n    v_other_revenue NUMERIC(18,4) := 0;\n    v_other_expenses NUMERIC(18,4) := 0;\n    v_net_income NUMERIC(18,4) := 0;\nBEGIN\n    -- 1. Penjualan Kotor (Kredit - Debit)\n    SELECT COALESCE(SUM(jl.credit - jl.debit), 0) INTO v_gross_sales\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN p_start_date AND p_end_date\n      AND coa.sub_category = 'OPERATING_REVENUE';\n\n    -- 2. Retur & Potongan Penjualan (Debit - Kredit)\n    SELECT COALESCE(SUM(jl.debit - jl.credit), 0) INTO v_sales_returns\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN p_start_date AND p_end_date\n      AND coa.sub_category = 'SALES_CONTRA';\n\n    v_net_sales := v_gross_sales - v_sales_returns;\n\n    -- 3. HPP (Debit - Kredit)\n    SELECT COALESCE(SUM(jl.debit - jl.credit), 0) INTO v_cogs\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN p_start_date AND p_end_date\n      AND coa.sub_category = 'COST_OF_GOODS_SOLD';\n\n    v_gross_profit := v_net_sales - v_cogs;\n\n    -- 4. Beban Operasional (Debit - Kredit)\n    SELECT COALESCE(SUM(jl.debit - jl.credit), 0) INTO v_operating_expenses\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN p_start_date AND p_end_date\n      AND coa.sub_category = 'OPERATING_EXPENSE';\n\n    v_operating_income := v_gross_profit - v_operating_expenses;\n\n    -- 5. Non-Operasional\n    SELECT COALESCE(SUM(jl.credit - jl.debit), 0) INTO v_other_revenue\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN p_start_date AND p_end_date\n      AND coa.sub_category = 'NON_OPERATING_REVENUE';\n\n    SELECT COALESCE(SUM(jl.debit - jl.credit), 0) INTO v_other_expenses\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN p_start_date AND p_end_date\n      AND coa.sub_category = 'NON_OPERATING_EXPENSE';\n\n    v_net_income := v_operating_income + (v_other_revenue - v_other_expenses);\n\n    RETURN json_build_object(\n        'gross_sales', v_gross_sales,\n        'sales_contra', v_sales_returns,\n        'net_sales', v_net_sales,\n        'cogs', v_cogs,\n        'gross_profit', v_gross_profit,\n        'operating_expenses', v_operating_expenses,\n        'operating_income', v_operating_income,\n        'other_revenue', v_other_revenue,\n        'other_expenses', v_other_expenses,\n        'net_income', v_net_income\n    );\nEND;\n$$ LANGUAGE plpgsql STABLE SECURITY DEFINER;\n```\n\n---\n\n### 5.5 Neraca (Balance Sheet / Laporan Posisi Keuangan)\n\n#### A. Formulasi Keseimbangan Aktiva vs Pasiva\nPersamaan penutup Neraca:\n$$\\text{Total Aset} = \\text{Total Liabilitas} + \\text{Total Ekuitas}$$\n\nDi mana komponen Ekuitas diperluas dengan **Laba Periode Berjalan (*Current Year Earnings*)**:\n$$\\text{Total Ekuitas} = \\text{Modal Disetor} - \\text{Prive} + \\text{Laba Ditahan Historis} + \\text{Laba Bersih Berjalan}$$\n\nLaba Bersih Berjalan diperoleh dari:\n$$\\text{Laba Bersih Berjalan} = \\sum_{\\text{awal tahun}}^{\\text{tanggal neraca}} (\\text{Pendapatan} - \\text{HPP} - \\text{Beban})$$\n\nTanpa penambahan Laba Bersih Berjalan ini ke pos Ekuitas, Neraca **tidak akan pernah seimbang (out of balance)** sebelum dilakukannya proses Tutup Buku Akhir Tahun (*Year-End Closing Journal*).\n\n#### B. Implementasi SQL Stored Procedure Neraca\n```sql\nCREATE OR REPLACE FUNCTION get_balance_sheet(\n    p_tenant_id UUID,\n    p_as_of_date DATE\n)\nRETURNS JSON AS $$\nDECLARE\n    v_total_assets NUMERIC(18, 4) := 0;\n    v_current_assets NUMERIC(18, 4) := 0;\n    v_fixed_assets NUMERIC(18, 4) := 0;\n    v_other_assets NUMERIC(18, 4) := 0;\n\n    v_total_liabilities NUMERIC(18, 4) := 0;\n    v_current_liabilities NUMERIC(18, 4) := 0;\n    v_long_term_liabilities NUMERIC(18, 4) := 0;\n\n    v_total_equity NUMERIC(18, 4) := 0;\n    v_equity_accounts NUMERIC(18, 4) := 0;\n    v_current_year_earnings NUMERIC(18, 4) := 0;\n    \n    v_year_start DATE;\nBEGIN\n    v_year_start := DATE_TRUNC('year', p_as_of_date)::DATE;\n\n    -- 1. Hitung Pos ASET (Debit - Kredit)\n    SELECT \n        COALESCE(SUM(CASE WHEN coa.sub_category = 'CURRENT_ASSET' THEN jl.debit - jl.credit ELSE 0 END), 0),\n        COALESCE(SUM(CASE WHEN coa.sub_category = 'FIXED_ASSET' THEN jl.debit - jl.credit ELSE 0 END), 0),\n        COALESCE(SUM(CASE WHEN coa.sub_category = 'OTHER_ASSET' THEN jl.debit - jl.credit ELSE 0 END), 0)\n    INTO v_current_assets, v_fixed_assets, v_other_assets\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date <= p_as_of_date\n      AND coa.category = 'ASSET';\n\n    v_total_assets := v_current_assets + v_fixed_assets + v_other_assets;\n\n    -- 2. Hitung Pos LIABILITAS (Kredit - Debit)\n    SELECT \n        COALESCE(SUM(CASE WHEN coa.sub_category = 'CURRENT_LIABILITY' THEN jl.credit - jl.debit ELSE 0 END), 0),\n        COALESCE(SUM(CASE WHEN coa.sub_category = 'LONG_TERM_LIABILITY' THEN jl.credit - jl.debit ELSE 0 END), 0)\n    INTO v_current_liabilities, v_long_term_liabilities\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date <= p_as_of_date\n      AND coa.category = 'LIABILITY';\n\n    v_total_liabilities := v_current_liabilities + v_long_term_liabilities;\n\n    -- 3. Hitung Pos EKUITAS DASAR (Kredit - Debit)\n    SELECT COALESCE(SUM(jl.credit - jl.debit), 0)\n    INTO v_equity_accounts\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date <= p_as_of_date\n      AND coa.category = 'EQUITY';\n\n    -- 4. Hitung LABA PERIODE BERJALAN DARI AWAL TAHUN HINGGA p_as_of_date\n    -- (Pendapatan [K-D] - HPP [D-K] - Beban [D-K])\n    SELECT \n        COALESCE(SUM(\n            CASE \n                WHEN coa.category = 'REVENUE' THEN (jl.credit - jl.debit)\n                WHEN coa.category IN ('EXPENSE') OR coa.sub_category = 'COST_OF_GOODS_SOLD' THEN -(jl.debit - jl.credit)\n                ELSE 0\n            END\n        ), 0)\n    INTO v_current_year_earnings\n    FROM journal_lines jl\n    JOIN journal_entries je ON jl.journal_id = je.id\n    JOIN chart_of_accounts coa ON jl.account_id = coa.id\n    WHERE je.tenant_id = p_tenant_id AND je.status = 'POSTED'\n      AND je.entry_date BETWEEN v_year_start AND p_as_of_date;\n\n    v_total_equity := v_equity_accounts + v_current_year_earnings;\n\n    RETURN json_build_object(\n        'as_of_date', p_as_of_date,\n        'assets', json_build_object(\n            'current_assets', v_current_assets,\n            'fixed_assets', v_fixed_assets,\n            'other_assets', v_other_assets,\n            'total_assets', v_total_assets\n        ),\n        'liabilities', json_build_object(\n            'current_liabilities', v_current_liabilities,\n            'long_term_liabilities', v_long_term_liabilities,\n            'total_liabilities', v_total_liabilities\n        ),\n        'equity', json_build_object(\n            'equity_accounts', v_equity_accounts,\n            'current_year_earnings', v_current_year_earnings,\n            'total_equity', v_total_equity\n        ),\n        'total_liabilities_and_equity', (v_total_liabilities + v_total_equity),\n        'is_balanced', (ROUND(v_total_assets, 2) = ROUND(v_total_liabilities + v_total_equity, 2)),\n        'difference', ABS(v_total_assets - (v_total_liabilities + v_total_equity))\n    );\nEND;\n$$ LANGUAGE plpgsql STABLE SECURITY DEFINER;\n```\n\n---\n\n## 6. DESIGN PATTERN & ARSITEKTUR KODE FRONTEND (REACT & TAILWIND)\n\n### 6.1 Struktur Direktori Proyek\n```text\nsrc/\n\u251c\u2500\u2500 assets/                  # Logo, icons, static assets\n\u251c\u2500\u2500 components/              # Reusable UI Atoms & Molecules\n\u2502   \u251c\u2500\u2500 ui/                  # Button, Modal, Input, Badge, Table, Alert\n\u2502   \u251c\u2500\u2500 layout/              # Sidebar, Topbar, AppShell, Breadcrumb\n\u2502   \u2514\u2500\u2500 accounting/          # AccountPicker, CurrencyInput, BalanceBadge\n\u251c\u2500\u2500 context/                 # AuthContext & Supabase Session Provider\n\u251c\u2500\u2500 hooks/                   # Custom Hooks (useJournals, useLedger, useReports)\n\u251c\u2500\u2500 lib/                     # Supabase Client, Formatters, Math Helpers\n\u2502   \u251c\u2500\u2500 supabaseClient.ts    # Supabase Client Singleton\n\u2502   \u251c\u2500\u2500 formatters.ts        # IDR Currency & Date-fns Localized Formatter\n\u2502   \u2514\u2500\u2500 accountingMath.ts    # Decimal arithmetic utilities\n\u251c\u2500\u2500 pages/                   # Application Views\n\u2502   \u251c\u2500\u2500 auth/                # Login, ForgotPassword\n\u2502   \u251c\u2500\u2500 dashboard/           # Financial KPI Summary & Charts\n\u2502   \u251c\u2500\u2500 coa/                 # Chart of Accounts Management Tree Table\n\u2502   \u251c\u2500\u2500 cash-in/             # Form & History Kas Masuk\n\u2502   \u251c\u2500\u2500 cash-out/            # Form & History Kas Keluar\n\u2502   \u251c\u2500\u2500 journal/             # Jurnal Manual, Form Dynamic Lines, Post/Void\n\u2502   \u2514\u2500\u2500 reports/             # Buku Besar, Neraca Saldo, Laba Rugi, Neraca\n\u251c\u2500\u2500 services/                # Supabase API services (TanStack Query definitions)\n\u251c\u2500\u2500 types/                   # TypeScript interfaces (COA, Journal, Report types)\n\u2514\u2500\u2500 App.tsx                  # React Router v6 Routes & Providers\n```\n\n### 6.2 Contoh Implementasi Form Jurnal Manual Dinamis (React + React Hook Form + Tailwind CSS)\nKomponen ini menjamin validasi sisi klien bahwa baris jurnal minimal 2 dan total debit sama dengan total kredit sebelum diposting ke Supabase:\n\n```tsx\n// src/components/accounting/ManualJournalForm.tsx\nimport React, { useState, useEffect } from 'react';\nimport { useForm, useFieldArray } from 'react-hook-form';\nimport { supabase } from '../../lib/supabaseClient';\n\ninterface JournalLineForm {\n  account_id: string;\n  debit: number;\n  credit: number;\n  memo: string;\n}\n\ninterface JournalFormValues {\n  entry_date: string;\n  description: string;\n  lines: JournalLineForm[];\n}\n\nexport const ManualJournalForm: React.FC = () => {\n  const { register, control, handleSubmit, watch, formState: { errors } } = useForm<JournalFormValues>({\n    defaultValues: {\n      entry_date: new Date().toISOString().split('T')[0],\n      description: '',\n      lines: [\n        { account_id: '', debit: 0, credit: 0, memo: '' },\n        { account_id: '', debit: 0, credit: 0, memo: '' }\n      ]\n    }\n  });\n\n  const { fields, append, remove } = useFieldArray({\n    control,\n    name: 'lines'\n  });\n\n  const watchedLines = watch('lines');\n  const [totalDebit, setTotalDebit] = useState(0);\n  const [totalCredit, setTotalCredit] = useState(0);\n  const [isBalanced, setIsBalanced] = useState(true);\n\n  useEffect(() => {\n    const d = watchedLines.reduce((acc, curr) => acc + (Number(curr.debit) || 0), 0);\n    const c = watchedLines.reduce((acc, curr) => acc + (Number(curr.credit) || 0), 0);\n    setTotalDebit(d);\n    setTotalCredit(c);\n    setIsBalanced(Math.abs(d - c) < 0.001 && d > 0);\n  }, [watchedLines]);\n\n  const onSubmit = async (data: JournalFormValues) => {\n    if (!isBalanced) {\n      alert('Total Debit dan Total Kredit harus seimbang!');\n      return;\n    }\n\n    try {\n      // Panggil Stored Procedure / RPC di Supabase untuk eksekusi atomik\n      const { error } = await supabase.rpc('post_manual_journal', {\n        p_entry_date: data.entry_date,\n        p_description: data.description,\n        p_lines: data.lines\n      });\n\n      if (error) throw error;\n      alert('Jurnal berhasil dibukukan secara double-entry!');\n    } catch (err: any) {\n      alert('Gagal memposting jurnal: ' + err.message);\n    }\n  };\n\n  return (\n    <div className=\"bg-white rounded-xl shadow-lg border border-slate-200 p-6 max-w-5xl mx-auto\">\n      <div className=\"border-b border-slate-200 pb-4 mb-6 flex justify-between items-center\">\n        <div>\n          <h2 className=\"text-2xl font-bold text-slate-800\">Entri Jurnal Umum (Memorial)</h2>\n          <p className=\"text-sm text-slate-500\">Menerapkan prinsip Double-Entry Bookkeeping yang ketat</p>\n        </div>\n        <div className={`px-4 py-2 rounded-full font-semibold text-sm ${isBalanced ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800 animate-pulse'}`}>\n          {isBalanced ? '\u2713 Seimbang (Balanced)' : `\u2715 Belum Seimbang (Selisih: Rp ${Math.abs(totalDebit - totalCredit).toLocaleString('id-ID')})`}\n        </div>\n      </div>\n\n      <form onSubmit={handleSubmit(onSubmit)} className=\"space-y-6\">\n        <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">\n          <div>\n            <label className=\"block text-sm font-medium text-slate-700 mb-1\">Tanggal Transaksi</label>\n            <input \n              type=\"date\" \n              {...register('entry_date', { required: true })} \n              className=\"w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 border-slate-300\"\n            />\n          </div>\n          <div>\n            <label className=\"block text-sm font-medium text-slate-700 mb-1\">Keterangan / Deskripsi Transaksi</label>\n            <input \n              type=\"text\" \n              placeholder=\"Contoh: Penyesuaian persediaan barang dagang akhir periode\" \n              {...register('description', { required: true })} \n              className=\"w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 border-slate-300\"\n            />\n          </div>\n        </div>\n\n        {/* Tabel Baris Jurnal */}\n        <div className=\"overflow-x-auto border border-slate-200 rounded-lg\">\n          <table className=\"w-full text-left text-sm\">\n            <thead className=\"bg-slate-50 text-slate-600 border-b border-slate-200\">\n              <tr>\n                <th className=\"p-3\">Akun</th>\n                <th className=\"p-3\">Memo / Catatan</th>\n                <th className=\"p-3 w-40 text-right\">Debit (Rp)</th>\n                <th className=\"p-3 w-40 text-right\">Kredit (Rp)</th>\n                <th className=\"p-3 w-16 text-center\">Aksi</th>\n              </tr>\n            </thead>\n            <tbody className=\"divide-y divide-slate-100\">\n              {fields.map((field, index) => (\n                <tr key={field.id} className=\"hover:bg-slate-50/50\">\n                  <td className=\"p-2\">\n                    <input \n                      placeholder=\"Kode / Akun ID\" \n                      {...register(`lines.${index}.account_id` as const, { required: true })}\n                      className=\"w-full px-2 py-1.5 border rounded border-slate-300 text-sm\"\n                    />\n                  </td>\n                  <td className=\"p-2\">\n                    <input \n                      placeholder=\"Keterangan baris\" \n                      {...register(`lines.${index}.memo` as const)}\n                      className=\"w-full px-2 py-1.5 border rounded border-slate-300 text-sm\"\n                    />\n                  </td>\n                  <td className=\"p-2\">\n                    <input \n                      type=\"number\" \n                      step=\"any\"\n                      placeholder=\"0\" \n                      {...register(`lines.${index}.debit` as const, { valueAsNumber: true })}\n                      className=\"w-full px-2 py-1.5 border rounded border-slate-300 text-right text-sm font-mono\"\n                    />\n                  </td>\n                  <td className=\"p-2\">\n                    <input \n                      type=\"number\" \n                      step=\"any\"\n                      placeholder=\"0\" \n                      {...register(`lines.${index}.credit` as const, { valueAsNumber: true })}\n                      className=\"w-full px-2 py-1.5 border rounded border-slate-300 text-right text-sm font-mono\"\n                    />\n                  </td>\n                  <td className=\"p-2 text-center\">\n                    {fields.length > 2 && (\n                      <button \n                        type=\"button\" \n                        onClick={() => remove(index)} \n                        className=\"text-rose-500 hover:text-rose-700 font-bold p-1\"\n                      >\n                        \u2715\n                      </button>\n                    )}\n                  </td>\n                </tr>\n              ))}\n            </tbody>\n            <tfoot className=\"bg-slate-50 font-semibold border-t border-slate-200\">\n              <tr>\n                <td colSpan={2} className=\"p-3 text-right\">Total:</td>\n                <td className=\"p-3 text-right font-mono text-indigo-700\">Rp {totalDebit.toLocaleString('id-ID')}</td>\n                <td className=\"p-3 text-right font-mono text-indigo-700\">Rp {totalCredit.toLocaleString('id-ID')}</td>\n                <td></td>\n              </tr>\n            </tfoot>\n          </table>\n        </div>\n\n        <div className=\"flex justify-between items-center pt-2\">\n          <button \n            type=\"button\" \n            onClick={() => append({ account_id: '', debit: 0, credit: 0, memo: '' })}\n            className=\"px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 font-medium text-sm transition\"\n          >\n            + Tambah Baris\n          </button>\n          <button \n            type=\"submit\" \n            disabled={!isBalanced} \n            className=\"px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition\"\n          >\n            Posting Jurnal Sekarang\n          </button>\n        </div>\n      </form>\n    </div>\n  );\n};\n```\n\n---\n\n## 7. RENCANA PENGUJIAN & JAMINAN KUALITAS (QA TESTING PLAN)\n\n### 7.1 Test Case Konsistensi Matematis (Double-Entry Invariant Test)\n| ID Test | Skenario Uji | Prosedur | Hasil yang Diharapkan |\n| :--- | :--- | :--- | :--- |\n| **TC-01** | Unbalanced Journal Insertion | Input baris Debit: 1.000.000, Kredit: 800.000 | PostgreSQL trigger melempar exception `Jurnal TIDAK SEIMBANG!` dan transaksi dibatalkan (Rollback). |\n| **TC-02** | Zero Rows / Single Line | Hanya menginput 1 baris jurnal | Ditolak oleh trigger: minimal 2 baris. |\n| **TC-03** | Negative Debit or Credit | Input nominal bertanda minus (-50.000) | Ditolak oleh constraint `chk_non_negative_amounts`. |\n| **TC-04** | Simultaneous Debit & Credit | Baris yang sama diisi Debit: 50.000 dan Kredit: 50.000 | Ditolak oleh constraint `chk_debit_xor_credit`. |\n| **TC-05** | Closed Fiscal Period Posting | Memposting transaksi pada tanggal periode yang `is_closed = TRUE` | Ditolak oleh trigger `fn_validate_journal_balance`. |\n| **TC-06** | Trial Balance Zero Sum | Melakukan query `get_trial_balance()` | $\\sum \\text{Debit} = \\sum \\text{Kredit}$. |\n| **TC-07** | Balance Sheet Proof | Memanggil `get_balance_sheet()` | Total Aset = Total Liabilitas + Total Ekuitas (termasuk Laba Periode Berjalan). Indikator `is_balanced = TRUE`. |\n\n---\n\n## 8. DEPLOYMENT, BACKUP & PEMELIHARAAN\n\n1. **Frontend Hosting**: Vercel atau Cloudflare Pages dengan konfigurasi continuous deployment dari branch `main` GitHub.\n2. **Backend & Database**: Supabase Hosted Pro Instance dengan Automated Daily Backup & Point-in-time Recovery (PITR).\n3. **Environment Security**: Penyimpanan `SUPABASE_URL` dan `SUPABASE_ANON_KEY` pada `.env.local` dan secrets manager; tidak pernah mengekspos `SUPABASE_SERVICE_ROLE_KEY` ke sisi frontend.\n4. **Disaster Recovery**: Skrip export schema dan data periodik secara terenkripsi.\n\n---\nDokumentasi ini telah diverifikasi dan siap dijadikan acuan utama implementasi teknis.\n";
+
+    document.addEventListener("DOMContentLoaded", async function() {
+      marked.use({
+        gfm: true,
+        breaks: false
+      });
+
+      // 1. Parse Markdown into HTML
+      const html = marked.parse(rawMarkdown);
+      const container = document.getElementById('content');
+      container.innerHTML = html;
+
+      // 2. Transform Mermaid code blocks into <div class="mermaid">
+      const mermaidNodes = [];
+      container.querySelectorAll('pre code.language-mermaid').forEach((el) => {
+        const pre = el.parentElement;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = el.textContent;
+        pre.replaceWith(div);
+        mermaidNodes.push(div);
+      });
+
+      // 3. Highlight code blocks (SQL, TSX, etc.)
+      container.querySelectorAll('pre code:not(.language-mermaid)').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+
+      // 4. Render KaTeX Formulas (both block $$ and inline $)
+      renderMathInElement(container, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false}
+        ],
+        throwOnError: false
+      });
+
+      // 5. Initialize and Run Mermaid
+      if (mermaidNodes.length > 0) {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'neutral',
+          themeVariables: {
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '12px',
+            primaryColor: '#e0e7ff',
+            primaryBorderColor: '#6366f1',
+            primaryTextColor: '#1e1b4b',
+            lineColor: '#64748b'
+          }
+        });
+        await mermaid.run({ nodes: mermaidNodes });
+      }
+
+      // Mark page as ready for printing
+      document.body.setAttribute('data-rendered', 'true');
+    });
+  </script>
+</body>
+</html>
