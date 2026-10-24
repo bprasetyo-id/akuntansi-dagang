@@ -229,13 +229,20 @@ html_template = f"""<!DOCTYPE html>
 
     /* Code Blocks */
     pre {{
-      background-color: #1e293b !important;
+      background-color: #0f172a !important;
+      border: 1px solid #334155;
       border-radius: 8px;
       padding: 12px 16px;
       overflow-x: auto;
       margin: 12px 0 16px 0;
       page-break-inside: avoid;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }}
+
+    pre code {{
+      font-family: 'Fira Code', monospace;
+      font-size: 8.5pt;
+      color: #e2e8f0 !important;
     }}
 
     code {{
@@ -273,6 +280,70 @@ html_template = f"""<!DOCTYPE html>
       color: #38bdf8;
       font-size: 8pt;
       line-height: 1.35;
+    }}
+
+    /* User Level Hierarchy Visual Cards */
+    .user-levels-container {{
+      margin: 16px 0 20px 0;
+      page-break-inside: avoid;
+    }}
+    .user-card-top {{
+      background: #eef2ff;
+      border: 1.5px solid #6366f1;
+      border-radius: 8px;
+      padding: 10px 16px;
+      text-align: center;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(99, 102, 241, 0.1);
+    }}
+    .user-card-grid {{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }}
+    .user-card-sub {{
+      border-radius: 8px;
+      padding: 10px 10px;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }}
+    .card-akuntan {{
+      background: #f0fdf4;
+      border: 1.5px solid #22c55e;
+    }}
+    .card-kasir {{
+      background: #f0f9ff;
+      border: 1.5px solid #0ea5e9;
+    }}
+    .card-auditor {{
+      background: #fefce8;
+      border: 1.5px solid #eab308;
+    }}
+    .card-badge {{
+      display: inline-block;
+      color: #ffffff;
+      font-size: 6.5pt;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }}
+    .badge-owner {{ background: #4f46e5; }}
+    .badge-akuntan {{ background: #16a34a; }}
+    .badge-kasir {{ background: #0284c7; }}
+    .badge-auditor {{ background: #ca8a04; }}
+    .card-title {{
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 9.5pt;
+      margin-bottom: 2px;
+    }}
+    .card-desc {{
+      font-size: 7.2pt;
+      line-height: 1.35;
+      color: #475569;
     }}
 
     ul, ol {{
@@ -415,15 +486,22 @@ for i in range(1, total_pages):
         color=(0.45, 0.5, 0.55)
     )
 
-doc.save(FINAL_PDF)
+output_saved_path = FINAL_PDF
+try:
+    doc.save(FINAL_PDF)
+except Exception as save_err:
+    output_saved_path = os.path.join(WORKSPACE_DIR, "PANDUAN_MANAJEMEN_USER_LEVEL_AKUNTANSI_V2.pdf")
+    doc.save(output_saved_path)
+    print(f"Catatan: File asli sedang dibuka di PDF viewer. Berhasil disimpan ke: {output_saved_path}")
+
 doc.close()
 
 # Cleanup raw PDF and HTML
 if os.path.exists(RAW_PDF):
     os.remove(RAW_PDF)
 
-file_size_kb = os.path.getsize(FINAL_PDF) / 1024
+file_size_kb = os.path.getsize(output_saved_path) / 1024
 print(f"PDF GENERATION SUCCESSFUL!")
-print(f"File Output: {FINAL_PDF}")
+print(f"File Output: {output_saved_path}")
 print(f"File Size: {file_size_kb:.2f} KB")
 print(f"Total Pages: {total_pages}")

@@ -22,28 +22,36 @@ Jika seluruh hak akses diberikan kepada satu orang tanpa pembatasan berjenjang, 
 
 ---
 
+<div style="page-break-before: always;"></div>
+
 ## 2. STRUKTUR 4 TINGKATAN PENGGUNA (4 USER LEVELS)
 
 Berdasarkan analisis kebutuhan operasional perusahaan dagang (skala berkembang hingga menengah), sistem akuntansi ini mengadopsi **4 Tingkatan Pengguna (User Levels)** yang saling melengkapi dan memiliki batasan wewenang yang tegas:
 
-```
-┌────────────────────────────────────────────────────────┐
-│        LEVEL 1: OWNER / DIREKTUR (SUPERADMIN)          │
-│   Otoritas Tertinggi, Eksekutif Finansial & Persetujuan│
-└──────────────────────────┬─────────────────────────────┘
-                           │
-         ┌─────────────────┴─────────────────┐
-         ▼                                   ▼
-┌─────────────────────────────────┐ ┌─────────────────────────────────┐
-│     LEVEL 2: AKUNTAN SENIOR     │ │   LEVEL 4: AUDITOR / PENGAWAS   │
-│   Pengelola Pembukuan & Laporan │ │  Pengawas Kepatuhan (Read-Only) │
-└────────────────┬────────────────┘ └─────────────────────────────────┘
-                 ▼
-┌─────────────────────────────────┐
-│   LEVEL 3: KASIR OPERASIONAL    │
-│  Data Entry Transaksi Kas Toko  │
-└─────────────────────────────────┘
-```
+<div class="user-levels-container">
+<div class="user-card-top">
+<div class="card-badge badge-owner">LEVEL 1 &bull; KENDALI TERTINGGI</div>
+<div class="card-title" style="color: #1e1b4b; font-size: 11pt;">OWNER / DIREKTUR (SUPERADMIN)</div>
+<div class="card-desc" style="color: #4338ca;">Otoritas Finansial Tertinggi, Persetujuan Void Transaksi, Tutup Buku & Akses Penuh Seluruh Modul</div>
+</div>
+<div class="user-card-grid">
+<div class="user-card-sub card-akuntan">
+<div class="card-badge badge-akuntan">LEVEL 2 &bull; SUPERVISOR</div>
+<div class="card-title" style="color: #14532d;">AKUNTAN SENIOR</div>
+<div class="card-desc" style="color: #15803d;">Perekaman Jurnal Penyesuaian, Rekonsiliasi Kas/Bank & Penyusunan Laporan Keuangan</div>
+</div>
+<div class="user-card-sub card-kasir">
+<div class="card-badge badge-kasir">LEVEL 3 &bull; OPERATOR</div>
+<div class="card-title" style="color: #0c4a6e;">KASIR OPERASIONAL</div>
+<div class="card-desc" style="color: #0369a1;">Pencatatan Kas Masuk Penjualan & Kas Keluar Toko (Tanpa Akses Laporan Laba Rugi/Neraca)</div>
+</div>
+<div class="user-card-sub card-auditor">
+<div class="card-badge badge-auditor">LEVEL 4 &bull; PENGAWAS</div>
+<div class="card-title" style="color: #713f12;">AUDITOR / KONSULTAN</div>
+<div class="card-desc" style="color: #854d0e;">Pemeriksaan Kepatuhan, Penelusuran Jejak Audit (Audit Trail) & Mode Read-Only Total</div>
+</div>
+</div>
+</div>
 
 ---
 
