@@ -145,7 +145,8 @@ export const NeracaSaldo = () => {
   const totalEndingDebit = trialBalanceRows.reduce((sum, r) => sum + r.endingDebit, 0);
   const totalEndingCredit = trialBalanceRows.reduce((sum, r) => sum + r.endingCredit, 0);
   const difference = Math.abs(totalEndingDebit - totalEndingCredit);
-  const isBalanced = difference < 0.001 && totalEndingDebit > 0;
+  const hasTransactions = totalEndingDebit > 0 || totalEndingCredit > 0;
+  const isBalanced = difference < 0.001;
 
   return (
     <div className="space-y-6">
@@ -197,12 +198,18 @@ export const NeracaSaldo = () => {
           )}
           <div>
             <div className="font-bold text-sm">
-              {isBalanced ? '✓ Neraca Saldo Mutlak Seimbang (Balanced)' : '✕ Neraca Saldo Belum Seimbang (Out of Balance)'}
+              {!hasTransactions
+                ? '✓ Neraca Saldo Seimbang (Belum Ada Mutasi Transaksi)'
+                : isBalanced 
+                  ? '✓ Neraca Saldo Mutlak Seimbang (Balanced)' 
+                  : '✕ Neraca Saldo Belum Seimbang (Out of Balance)'}
             </div>
             <p className="text-xs opacity-80 mt-0.5">
-              {isBalanced 
-                ? 'Prinsip persamaan dasar akuntansi terpenuhi: Total Debit = Total Kredit.' 
-                : `Terdapat selisih perimbangan sebesar ${formatRupiah(difference)}. Periksa ayat jurnal penyesuaian.`}
+              {!hasTransactions
+                ? 'Total Debit (Rp 0) dan Kredit (Rp 0) seimbang sempurna. Belum ada ayat jurnal transaksi yang diposting.'
+                : isBalanced 
+                  ? 'Prinsip persamaan dasar akuntansi terpenuhi: Total Debit = Total Kredit.' 
+                  : `Terdapat selisih perimbangan sebesar ${formatRupiah(difference)}. Periksa ayat jurnal penyesuaian.`}
             </p>
           </div>
         </div>
