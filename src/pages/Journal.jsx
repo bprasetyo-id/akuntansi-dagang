@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
-import { FileText, Plus, Trash2, CheckCircle2, AlertTriangle, Save } from 'lucide-react';
+import { FileText, Plus, Trash2, CheckCircle2, AlertTriangle, Save, Info } from 'lucide-react';
 
 export const Journal = () => {
   const [entryNumber, setEntryNumber] = useState(`JU-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-001`);
@@ -22,6 +22,7 @@ export const Journal = () => {
   const totalDebit = lines.reduce((sum, item) => sum + (Number(item.debit) || 0), 0);
   const totalCredit = lines.reduce((sum, item) => sum + (Number(item.credit) || 0), 0);
   const difference = Math.abs(totalDebit - totalCredit);
+  const hasValues = totalDebit > 0 || totalCredit > 0;
   const isBalanced = difference < 0.001 && totalDebit > 0;
 
   const handleLineChange = (index, field, value) => {
@@ -110,11 +111,18 @@ export const Journal = () => {
 
         {/* Live Balance Status Badge */}
         <div className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border ${
-          isBalanced 
-            ? 'bg-emerald-50 text-emerald-800 border-emerald-300' 
-            : 'bg-rose-50 text-rose-800 border-rose-300 animate-pulse'
+          !hasValues
+            ? 'bg-slate-100 text-slate-700 border-slate-300'
+            : isBalanced 
+              ? 'bg-emerald-50 text-emerald-800 border-emerald-300' 
+              : 'bg-rose-50 text-rose-800 border-rose-300 animate-pulse'
         }`}>
-          {isBalanced ? (
+          {!hasValues ? (
+            <>
+              <Info className="w-4 h-4 text-slate-500" />
+              <span>MENUNGGU INPUT NOMINAL</span>
+            </>
+          ) : isBalanced ? (
             <>
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               <span>✓ JURNAL SEIMBANG</span>

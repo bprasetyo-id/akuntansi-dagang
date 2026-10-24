@@ -13,7 +13,8 @@ import {
   Hash, 
   Calendar,
   Layers,
-  Scale
+  Scale,
+  Info
 } from 'lucide-react';
 
 export const JurnalManual = () => {
@@ -98,6 +99,7 @@ export const JurnalManual = () => {
   const totalDebit = lines.reduce((acc, curr) => acc + (parseFloat(curr.debit) || 0), 0);
   const totalCredit = lines.reduce((acc, curr) => acc + (parseFloat(curr.credit) || 0), 0);
   const difference = Math.abs(totalDebit - totalCredit);
+  const hasValues = totalDebit > 0 || totalCredit > 0;
   
   // Validasi Ketat Keseimbangan
   const isBalanced = difference < 0.001 && totalDebit > 0 && lines.length >= 2;
@@ -218,11 +220,18 @@ export const JurnalManual = () => {
         {/* Live Balance Status Badge */}
         <div className="flex items-center gap-2">
           <div className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${
-            isBalanced
-              ? 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-sm'
-              : 'bg-rose-50 text-rose-800 border-rose-300 animate-pulse'
+            !hasValues
+              ? 'bg-slate-100 text-slate-700 border-slate-300'
+              : isBalanced
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-300 shadow-sm'
+                : 'bg-rose-50 text-rose-800 border-rose-300 animate-pulse'
           }`}>
-            {isBalanced ? (
+            {!hasValues ? (
+              <>
+                <Info className="w-4 h-4 text-slate-500 shrink-0" />
+                <span>MENUNGGU INPUT NOMINAL</span>
+              </>
+            ) : isBalanced ? (
               <>
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>✓ SEIMBANG (DEBIT = KREDIT)</span>
@@ -459,8 +468,8 @@ export const JurnalManual = () => {
                 </td>
                 <td></td>
               </tr>
-              {/* Notifikasi Selisih Jika Belum Seimbang */}
-              {!isBalanced && (
+              {/* Notifikasi Selisih Jika Ada Ketidakseimbangan Riil */}
+              {hasValues && difference >= 0.001 && (
                 <tr className="bg-rose-50/60 text-rose-700">
                   <td colSpan={2} className="p-2.5 text-right font-sans text-xs">
                     Selisih Tidak Seimbang:
@@ -486,12 +495,18 @@ export const JurnalManual = () => {
             <span>+ Tambah Baris Jurnal</span>
           </button>
 
-          {/* VALIDASI KETAT: Tombol Simpan disabled jika total Debit !== total Kredit */}
+          {/* VALIDASI KETAT: Tombol Simpan disabled jika total Debit !== total Kredit atau bernilai 0 */}
           <button
             type="submit"
             disabled={!isBalanced || loading}
             className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-md transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            title={!isBalanced ? 'Jurnal harus seimbang (Debit = Kredit) untuk dapat disimpan' : 'Simpan dan Posting Jurnal'}
+            title={
+              !hasValues
+                ? 'Masukkan nominal Debit dan Kredit terlebih dahulu'
+                : !isBalanced
+                  ? `Jurnal belum seimbang (Selisih: Rp ${difference.toLocaleString('id-ID')})`
+                  : 'Simpan dan Posting Jurnal'
+            }
           >
             {loading ? (
               <>
