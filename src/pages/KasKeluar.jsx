@@ -60,13 +60,16 @@ export const KasKeluar = () => {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        // 1. Akun Tujuan Pengeluaran: Beban (EXPENSE), Utang (LIABILITY), atau Prive
+        // 1. Akun Tujuan Pengeluaran: Beban (EXPENSE), Utang (LIABILITY), Pendapatan (REVENUE untuk koreksi/retur), atau Prive
         const targetList = data.filter(a => 
           a.type === 'EXPENSE' || 
           a.type === 'LIABILITY' ||
+          a.type === 'REVENUE' ||
           a.code === '3-1002' ||
           a.name.toLowerCase().includes('utang') ||
-          a.name.toLowerCase().includes('beban')
+          a.name.toLowerCase().includes('beban') ||
+          a.name.toLowerCase().includes('pendapatan') ||
+          a.name.toLowerCase().includes('retur')
         );
         setTargetAccounts(targetList);
         if (targetList.length > 0) setTargetAccountId(targetList[0].id);
@@ -280,7 +283,7 @@ export const KasKeluar = () => {
             <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <ShoppingBag className="w-3.5 h-3.5 text-rose-600" />
-                Akun Tujuan Pengeluaran (Beban/Utang)
+                Akun Tujuan Pengeluaran (Beban / Utang / Koreksi)
               </span>
               <span className="text-[10px] text-rose-700 font-bold uppercase">[Debit]</span>
             </label>
